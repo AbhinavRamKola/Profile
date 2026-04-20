@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abhinav Ram Kola — Digital Project Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0e0e;
+    --ink2: #444;
+    --ink3: #888;
+    --line: #e0e0e0;
+    --bg: #fafaf8;
+    --card: #ffffff;
+    --accent: #1a1a1a;
+    --blue: #1a4fdb;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Inter', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-color: var(--line); }
+  .nav-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; letter-spacing: 0.02em; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--ink3); transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 4rem 5rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, #f0ede6 0%, #fafaf8 60%);
+    z-index: 0;
+  }
+  .hero-line {
+    position: absolute; top: 0; right: 8rem;
+    width: 1px; height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--line) 30%, var(--line) 70%, transparent);
+    z-index: 0;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 700px; }
+  .hero-eyebrow {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink3);
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    font-weight: 300; line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-name em { font-style: italic; color: var(--ink2); }
+  .hero-sub {
+    font-size: 1rem; color: var(--ink3); font-weight: 300;
+    margin-top: 1.5rem; max-width: 480px; line-height: 1.7;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; margin-top: 2.5rem;
+    opacity: 0; animation: fadeUp 0.9s 0.65s forwards;
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.75rem;
+    font-family: var(--sans); font-size: 0.75rem;
+    font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all 0.2s; border-radius: 2px;
+  }
+  .btn-primary { background: var(--ink); color: #fff; }
+  .btn-primary:hover { background: #333; transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn-ghost:hover { border-color: var(--ink3); transform: translateY(-1px); }
+
+  .hero-stats {
+    position: absolute; right: 4rem; bottom: 5rem; z-index: 1;
+    display: flex; flex-direction: column; gap: 2rem;
+    opacity: 0; animation: fadeIn 1s 0.9s forwards;
+  }
+  .hero-stat { text-align: right; }
+  .hero-stat-num {
+    font-family: var(--serif); font-size: 2.2rem;
+    font-weight: 300; line-height: 1; color: var(--ink);
+  }
+  .hero-stat-lbl {
+    font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink3); margin-top: 2px;
+  }
+
+  /* SECTIONS */
+  section { padding: 6rem 4rem; }
+  .section-inner { max-width: 900px; margin: 0 auto; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+  .section-num {
+    font-family: var(--serif); font-size: 0.85rem;
+    color: var(--ink3); font-style: italic;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: 2rem;
+    font-weight: 300; letter-spacing: -0.01em;
+  }
+  .section-line {
+    flex: 1; height: 1px;
+    background: var(--line); margin-left: 1rem;
+  }
+
+  /* ABOUT */
+  #about { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
+  .about-text p {
+    font-size: 1.05rem; line-height: 1.8; color: var(--ink2);
+    font-weight: 300;
+  }
+  .about-details { display: flex; flex-direction: column; gap: 1.5rem; }
+  .about-detail { display: flex; flex-direction: column; gap: 2px; padding-bottom: 1.5rem; border-bottom: 1px solid var(--line); }
+  .about-detail:last-child { border-bottom: none; }
+  .detail-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); }
+  .detail-value { font-size: 0.9rem; color: var(--ink); }
+
+  /* EXPERIENCE */
+  #experience { background: var(--bg); }
+  .job { display: grid; grid-template-columns: 200px 1fr; gap: 3rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
+  .job:first-of-type { border-top: 1px solid var(--line); }
+  .job-meta { padding-top: 4px; }
+  .job-dates { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); }
+  .job-co { font-family: var(--serif); font-size: 1rem; margin-top: 6px; color: var(--blue); }
+  .job-title-main { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.75rem; }
+  .job-desc { font-size: 0.88rem; color: var(--ink2); line-height: 1.7; font-weight: 300; }
+  .job-bullets { list-style: none; margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+  .job-bullets li {
+    font-size: 0.85rem; color: var(--ink2); line-height: 1.6;
+    padding-left: 1rem; position: relative; font-weight: 300;
+  }
+  .job-bullets li::before {
+    content: ''; position: absolute; left: 0; top: 10px;
+    width: 3px; height: 3px; border-radius: 50%;
+    background: var(--ink3);
+  }
+
+  /* SKILLS */
+  #skills { background: var(--card); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .skill-cell {
+    padding: 1.75rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+  }
+  .skill-cell:hover { background: var(--bg); }
+  .skill-cell:nth-child(3n) { border-right: none; }
+  .skill-cell:nth-last-child(-n+3) { border-bottom: none; }
+  .skill-cat { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.6rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .skill-tag {
+    font-size: 0.75rem; color: var(--ink2);
+    background: var(--bg); border: 1px solid var(--line);
+    padding: 0.2rem 0.6rem; border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .skill-cell:hover .skill-tag { border-color: var(--ink3); color: var(--ink); }
+
+  /* EDUCATION */
+  #education { background: var(--bg); }
+  .edu-item { display: grid; grid-template-columns: 200px 1fr; gap: 3rem; padding: 2rem 0; border-bottom: 1px solid var(--line); }
+  .edu-item:first-of-type { border-top: 1px solid var(--line); }
+  .edu-year { font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); padding-top: 4px; }
+  .edu-deg { font-size: 1rem; font-weight: 500; }
+  .edu-school { font-family: var(--serif); font-size: 0.95rem; color: var(--ink2); margin-top: 4px; }
+  .edu-note { display: inline-block; margin-top: 8px; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); border: 1px solid currentColor; padding: 0.15rem 0.6rem; border-radius: 2px; }
+
+  /* CONTACT */
+  #contact {
+    background: var(--ink); color: #fff;
+    text-align: center; padding: 6rem 4rem;
+  }
+  .contact-headline {
+    font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300; color: #fff; margin-bottom: 1rem;
+  }
+  .contact-headline em { font-style: italic; opacity: 0.6; }
+  .contact-sub { color: rgba(255,255,255,0.5); font-size: 0.9rem; margin-bottom: 2.5rem; font-weight: 300; }
+  .contact-links { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+  .contact-link {
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.6);
+    text-decoration: none; transition: color 0.2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .contact-link:hover { color: #fff; }
+  .contact-link-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+
+  footer {
+    background: var(--ink); border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 1.5rem 4rem; display: flex; justify-content: space-between; align-items: center;
+  }
+  footer span { font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* SCROLL INDICATOR */
+  .scroll-indicator {
+    position: absolute; left: 4rem; bottom: 3rem; z-index: 1;
+    display: flex; align-items: center; gap: 0.75rem;
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+  .scroll-line {
+    width: 40px; height: 1px; background: var(--ink3);
+    animation: scrollPulse 2s 1.5s infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { transform: scaleX(1); opacity:0.5; }
+    50% { transform: scaleX(0.4); opacity:1; }
+  }
+  .scroll-text { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 0 1.5rem 4rem; }
+    .hero-stats { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .about-grid, .job, .edu-item { grid-template-columns: 1fr; gap: 1.5rem; }
+    .skills-grid { grid-template-columns: 1fr 1fr; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <span class="nav-name">Abhinav Ram Kola</span>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#education">Education</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Digital Project Manager &nbsp;·&nbsp; Värnamo, Sweden</p>
+    <h1 class="hero-name">Abhinav <em>Ram</em><br>Kola</h1>
+    <p class="hero-sub">Building digital systems that actually work — supplier databases, compliance tools, BI dashboards — across global supply chains.</p>
+    <div class="hero-actions">
+      <a href="mailto:abhinavram98@gmail.com" class="btn btn-primary">Get in touch</a>
+      <a href="AbhinavRamKola_Resume_ATS.docx" class="btn btn-ghost" download>Download CV</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">260+</div>
+      <div class="hero-stat-lbl">hours saved / week</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">9k+</div>
+      <div class="hero-stat-lbl">suppliers managed</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">60+</div>
+      <div class="hero-stat-lbl">companies impacted</div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Profile</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>Digital Project Manager with experience driving operational and data-driven projects in global supply chains. Specialised in building digital solutions for supplier management, sustainability compliance (CBAM, ESG), and business intelligence. Proven ability to simplify complex processes, improve data quality, and enable organisations through automation, system ownership, and cross-functional collaboration.</p>
+      </div>
+      <div class="about-details">
+        <div class="about-detail">
+          <span class="detail-label">Location</span>
+          <span class="detail-value">Värnamo, Sweden</span>
+        </div>
+        <div class="about-detail">
+          <span class="detail-label">Current role</span>
+          <span class="detail-value">Digital Project Manager, BUFAB International AB</span>
+        </div>
+        <div class="about-detail">
+          <span class="detail-label">Email</span>
+          <span class="detail-value">abhinavram98@gmail.com</span>
+        </div>
+        <div class="about-detail">
+          <span class="detail-label">Phone</span>
+          <span class="detail-value">+46 768 203 688</span>
+        </div>
+        <div class="about-detail">
+          <span class="detail-label">Languages</span>
+          <span class="detail-value">English · Hindi · Telugu · Japanese (Basic)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="job reveal">
+      <div class="job-meta">
+        <div class="job-dates">Jun 2024 – Present</div>
+        <div class="job-co">BUFAB International AB</div>
+      </div>
+      <div class="job-body">
+        <div class="job-title-main">Digital Project Manager</div>
+        <ul class="job-bullets">
+          <li>Led digital projects across sourcing and sustainability touching 60+ companies globally within the BUFAB Group</li>
+          <li>Built and grew the Supplier Master Management (SMM) system, centralising data for 9,000+ suppliers</li>
+          <li>Built BUFAB's CBAM compliance solution from scratch including automated data collection and XML bulk reporting to EU systems</li>
+          <li>Created Qlik Sense dashboards used by around 100 managers and lead buyers for daily KPI tracking</li>
+          <li>Automated sourcing team workflows saving 260+ hours per week company-wide across 88 lead buyers</li>
+          <li>Member of the Change Advisory Board, reviewing system changes before go-live</li>
+          <li>Managed one direct report, supporting delivery and professional development</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job reveal">
+      <div class="job-meta">
+        <div class="job-dates">Sep 2022 – Jun 2024</div>
+        <div class="job-co">BUFAB International AB</div>
+      </div>
+      <div class="job-body">
+        <div class="job-title-main">Digital Project Developer</div>
+        <ul class="job-bullets">
+          <li>Helped digitalise buying workflows, improving collaboration and transparency across global teams</li>
+          <li>Built Qlik Sense dashboards and reports giving leadership better visibility into sourcing and sustainability data</li>
+          <li>Part of the early team that built sustainability tools later rolled out across the whole BUFAB Group</li>
+          <li>Contributed to automation projects that simplified supply chain data collection and reporting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="job reveal">
+      <div class="job-meta">
+        <div class="job-dates">Sep 2021 – Sep 2022</div>
+        <div class="job-co">BUFAB International AB</div>
+      </div>
+      <div class="job-body">
+        <div class="job-title-main">Management Trainee – Sourcing & Digitalization</div>
+        <ul class="job-bullets">
+          <li>Rotated across sourcing, ESG reporting, and digital projects, building end-to-end supply chain knowledge</li>
+          <li>Helped build early sustainability tools later adopted and scaled globally</li>
+          <li>Worked with business and IT teams to spot process improvement opportunities</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-cell">
+        <div class="skill-cat">Project Management</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Agile</span>
+          <span class="skill-tag">Scrum</span>
+          <span class="skill-tag">CAB</span>
+          <span class="skill-tag">Stakeholder Mgmt</span>
+          <span class="skill-tag">Risk Management</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cat">Digital & Automation</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Process Automation</span>
+          <span class="skill-tag">Workflow Design</span>
+          <span class="skill-tag">ERP Integration</span>
+          <span class="skill-tag">System Implementation</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cat">Data & BI</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Qlik Sense</span>
+          <span class="skill-tag">KPI Dashboards</span>
+          <span class="skill-tag">SQL</span>
+          <span class="skill-tag">Data Warehousing</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cat">Sustainability</div>
+        <div class="skill-tags">
+          <span class="skill-tag">CBAM</span>
+          <span class="skill-tag">ESG Reporting</span>
+          <span class="skill-tag">EU Compliance</span>
+          <span class="skill-tag">XML Reporting</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cat">Supply Chain</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Supplier MDM</span>
+          <span class="skill-tag">SRM</span>
+          <span class="skill-tag">Procurement</span>
+          <span class="skill-tag">Sourcing Workflows</span>
+        </div>
+      </div>
+      <div class="skill-cell">
+        <div class="skill-cat">Tools & Systems</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Microsoft 365</span>
+          <span class="skill-tag">SharePoint</span>
+          <span class="skill-tag">Reporting Tools</span>
+          <span class="skill-tag">SRM Systems</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="section-inner">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="edu-item reveal">
+      <div class="edu-year">2019 – 2021</div>
+      <div>
+        <div class="edu-deg">Master's in Software Engineering</div>
+        <div class="edu-school">Blekinge Institute of Technology, Karlskrona, Sweden</div>
+        <span class="edu-note">Merit Scholarship</span>
+      </div>
+    </div>
+
+    <div class="edu-item reveal">
+      <div class="edu-year">2015 – 2018</div>
+      <div>
+        <div class="edu-deg">Bachelor of Technology, Computer Science</div>
+        <div class="edu-school">Jawaharlal Nehru Technological University, Hyderabad, India</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="contact-headline">Let's work <em>together</em></h2>
+  <p class="contact-sub">Open to new opportunities across Sweden and beyond</p>
+  <div class="contact-links">
+    <a href="mailto:abhinavram98@gmail.com" class="contact-link">abhinavram98@gmail.com</a>
+    <div class="contact-link-dot"></div>
+    <a href="tel:+46768203688" class="contact-link">+46 768 203 688</a>
+    <div class="contact-link-dot"></div>
+    <span class="contact-link">Värnamo, Sweden</span>
+  </div>
+</section>
+
+<footer>
+  <span>Abhinav Ram Kola &nbsp;·&nbsp; Digital Project Manager</span>
+  <span>abhinavram98@gmail.com</span>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
